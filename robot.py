@@ -24,26 +24,48 @@ mC = LargeMotor(OUTPUT_B)
 motors = MoveTank(OUTPUT_A, OUTPUT_B)
 
 while not btn.any():    # avbryt loopen om en knapp trycks.
-    refRead = cl.value()
-
 
     if cl.value()<25: # om vi är på svart, så kör rakt fram!
         mB.run_forever(speed_sp=250)
         mC.run_forever(speed_sp=250)
     else: # om vi inte är på vitt, så ska vi skanna
 
-        for i in range(10):
-            motors.on_for_seconds(SpeedPercent(-20), SpeedPercent(20), 0.1)
-            if(cl.value()<25):
-                break
+        blackFound = False
 
-        for i in range(10):
-            motors.on_for_seconds(SpeedPercent(20), SpeedPercent(-20), 0.1)
-            if(cl.value()<25):
-                break
+        if blackFound == False:
+            motors.on_for_seconds(SpeedPercent(-20), SpeedPercent(20, 1, block=False))
+            for i in range(100): # skanna 100 ggr
+                if(cl.value()<25): # om vi hittar svart igen
+                    blackFound = True
+                    break
+                sleep(0.01) # skanna var 10 ms
 
-        #break
+        if blackFound == False:
+            motors.on_for_seconds(SpeedPercent(20), SpeedPercent(-20, 2, block=False))
+            for i in range(200): # skanna 200 ggr fast åt motsatt håll
+                if(cl.value()<25): # om vi hittar svart igen
+                    blackFound = True
+                    break
+                sleep(0.01) # skanna var 10 ms
 
+        if blackFound == False:
+            motors.on_for_seconds(SpeedPercent(-20), SpeedPercent(20, 1, block=False))
+            for i in range(100): # skanna 100 ggr
+                if(cl.value()<25): # om vi hittar svart igen
+                    blackFound = True
+                    break
+                sleep(0.01) # skanna var 10 ms
+
+        if blackFound == False: # om svart fortfarande inte hittats, 
+                                # antar vi att det är ett glapp och
+                                # åker rakt fram tills vi hittar svart igen.
+            while(blackFound == False):
+                motors.on_for_seconds(SpeedPercent(20), SpeedPercent(20, 1, block=False))
+                for i in range(100): # skanna 100 ggr
+                    if(cl.value()<25): # om vi hittar svart igen
+                        blackFound = True
+                        break
+                    sleep(0.01) # skanna var 10 ms
        
       
 mB.stop(stop_action='brake')
