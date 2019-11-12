@@ -51,6 +51,33 @@ def searchForBlackLine(motor1, motor2, timeSeconds, bf):
     else:
         return True
       
+def goAroundObstacle:
+
+    turn90DegreeLeft()
+    goStraight()
+    turn90DegreeRight()
+    goStraight()
+    turn90DegreeRight()
+
+    goUntil = False
+    while goUntil == False:
+        goUntil = searchForBlackLine(10,10,1, goUntil)
+
+    turn90DegreeLeft()
+
+
+
+def turn90DegreeLeft():
+    #motors.on_for_seconds(SpeedPercent(50), SpeedPercent(-50), 1)
+    motors.on_for_rotations(SpeedPercent(-50), SpeedPercent(50), 3)
+
+def turn90DegreeRight():
+    #motors.on_for_seconds(SpeedPercent(-50), SpeedPercent(50), 1)
+    motors.on_for_rotations(SpeedPercent(50), SpeedPercent(-50), 3)
+
+def goStraight():
+    motors.on_for_seconds(SpeedPercent(50), SpeedPercent(50), 5)
+
 mB.stop(stop_action='brake')
 mC.stop(stop_action='brake')
 mB.run_forever(speed_sp=0)
