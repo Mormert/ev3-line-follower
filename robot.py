@@ -32,41 +32,24 @@ while not btn.any():    # avbryt loopen om en knapp trycks.
 
         blackFound = False
 
-        if blackFound == False:
-            motors.on_for_seconds(SpeedPercent(-20), SpeedPercent(20, 1, block=False))
-            for i in range(100): # skanna 100 ggr
-                if(cl.value()<25): # om vi hittar svart igen
-                    blackFound = True
-                    break
-                sleep(0.01) # skanna var 10 ms
+        blackFound = searchForBlackLine(-20,20,1, blackFound)
+        blackFound = searchForBlackLine(20,-20,2, blackFound)
+        blackFound = searchForBlackLine(-20,20,1, blackFound)
 
-        if blackFound == False:
-            motors.on_for_seconds(SpeedPercent(20), SpeedPercent(-20, 2, block=False))
-            for i in range(200): # skanna 200 ggr fast åt motsatt håll
-                if(cl.value()<25): # om vi hittar svart igen
-                    blackFound = True
-                    break
-                sleep(0.01) # skanna var 10 ms
-
-        if blackFound == False:
-            motors.on_for_seconds(SpeedPercent(-20), SpeedPercent(20, 1, block=False))
-            for i in range(100): # skanna 100 ggr
-                if(cl.value()<25): # om vi hittar svart igen
-                    blackFound = True
-                    break
-                sleep(0.01) # skanna var 10 ms
-
-        if blackFound == False: # om svart fortfarande inte hittats, 
-                                # antar vi att det är ett glapp och
-                                # åker rakt fram tills vi hittar svart igen.
-            while(blackFound == False):
-                motors.on_for_seconds(SpeedPercent(20), SpeedPercent(20, 1, block=False))
-                for i in range(100): # skanna 100 ggr
-                    if(cl.value()<25): # om vi hittar svart igen
-                        blackFound = True
-                        break
-                    sleep(0.01) # skanna var 10 ms
+        while blackFound == False:
+            blackFound = searchForBlackLine(20,20,1, blackFound)
        
+
+def searchForBlackLine(motor1, motor2, timeSeconds, bf):
+    if bf == False:
+        motors.on_for_seconds(SpeedPercent(motor1), SpeedPercent(motor1, timeSeconds, block=False))
+            for i in range(100 * timeSeconds): # skanna 100 ggr
+                if(cl.value()<25): # om vi hittar svart igen
+                    return True
+                sleep(0.01) # skanna var 10 ms
+        return False
+    else:
+        return True
       
 mB.stop(stop_action='brake')
 mC.stop(stop_action='brake')
