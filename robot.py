@@ -102,7 +102,7 @@ def goAroundObstacle():                         # en hårdkodad funtkion för at
     while goUntil == False:                     
         goUntil = searchForBlackLine(50,50,1, goUntil)
 
-    turn90DegreeLeft()                          # när vi hittat svarta linjen igen gör vi en 90-graders-sväng igen.
+    turn90DegreeLeft(0.3)                          # när vi hittat svarta linjen igen gör vi en 90-graders-sväng igen.
 
 
 def turn90DegreeLeft(goforsec):
