@@ -74,7 +74,7 @@ def main():
 def searchForBlackLine(motor1, motor2, timeSeconds, bf):
     if bf == False:
         motors.on_for_seconds(SpeedPercent(motor1), SpeedPercent(motor2), timeSeconds*2, block=False)
-        for i in range(int(100 * timeSeconds)): # skanna 100 ggr
+        for i in range(int(100 * timeSeconds)): # skanna (100 * antal sekunder) / sekund
             if us.value() < 100:                # om ett objekt är 10 cm från US-sensorn
 
                 goAroundObstacle()              # gå runt objektet
@@ -89,6 +89,9 @@ def searchForBlackLine(motor1, motor2, timeSeconds, bf):
       
 def goAroundObstacle():                         # en hårdkodad funtkion för att gå runt ett objekt
 
+    # dessa värden som används i sväng-funktionerna har testats fram
+    # tills att de är lämpliga.
+
     turn90DegreeLeft(0.3)
     goStraight(0.7)
     turn90DegreeRight(0.3)
@@ -100,7 +103,6 @@ def goAroundObstacle():                         # en hårdkodad funtkion för at
         goUntil = searchForBlackLine(50,50,1, goUntil)
 
     turn90DegreeLeft()                          # när vi hittat svarta linjen igen gör vi en 90-graders-sväng igen.
-
 
 
 def turn90DegreeLeft(goforsec):
